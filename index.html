@@ -1,0 +1,607 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<div id="kwRoot">
+<style>
+/* ============ KITCHEN WORLD — scoped, builder-safe ============ */
+#kwRoot{
+  --paper:#F5F4EF; --ink:#0B1E3B; --red:#D8232A; --deep:#081627;
+  --steel:#68718B; --line:rgba(11,30,59,.18); --line2:rgba(245,244,239,.16);
+  --disp:'Anton','Arial Narrow',Impact,sans-serif;
+  --body:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono','Courier New',monospace;
+  --ease:cubic-bezier(.22,.61,.2,1);
+  position:relative;
+  font-family:var(--body); font-size:17px; line-height:1.65; color:var(--ink);
+  background:var(--paper); -webkit-font-smoothing:antialiased;
+}
+#kwRoot *,#kwRoot *::before,#kwRoot *::after{box-sizing:border-box;margin:0;padding:0}
+#kwRoot img{display:block;max-width:100%;height:auto}
+#kwRoot a{color:inherit;text-decoration:none}
+#kwRoot ul{list-style:none}
+#kwRoot button{font:inherit;background:none;border:0;cursor:pointer;color:inherit}
+#kwRoot h1,#kwRoot h2,#kwRoot h3{font-family:var(--disp);font-weight:400;text-transform:uppercase;line-height:.98;letter-spacing:.012em;color:var(--ink)}
+#kwRoot section{scroll-margin-top:92px}
+.kw-c{width:min(1240px,92%);margin:0 auto}
+.kw-noise{position:absolute;inset:0;pointer-events:none;z-index:60;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.kw-mono{font-family:var(--mono)}
+.kw-tag{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--red);display:inline-flex;align-items:center;gap:10px}
+.kw-tag::before{content:"";width:26px;height:2px;background:var(--red)}
+.kw-tag--lt{color:#FF8A80}.kw-tag--lt::before{background:#FF8A80}
+
+/* ---- motion ---- */
+#kwRoot.kw-js .kw-rv{opacity:0;transform:translateY(30px);transition:opacity .85s var(--ease) var(--d,0s),transform .85s var(--ease) var(--d,0s)}
+#kwRoot.kw-js .kw-rv.kw-in{opacity:1;transform:none}
+.kw-lm{display:block;overflow:hidden;padding-bottom:.06em}
+#kwRoot.kw-js .kw-lm>span{display:block;transform:translateY(112%);transition:transform 1s var(--ease) var(--d,0s)}
+#kwRoot.kw-js .kw-in .kw-lm>span,#kwRoot.kw-js .kw-in.kw-lm>span{transform:none}
+
+/* ============ UTILITY BAR + NAV ============ */
+.kw-util{background:var(--deep);color:#B9C2D6;font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase}
+.kw-util .kw-c{display:flex;justify-content:space-between;gap:16px;padding:9px 0}
+.kw-util b{color:#fff;font-weight:500}
+.kw-util .kw-u-r{display:flex;gap:22px}
+.kw-util a:hover{color:#FF8A80}
+.kw-nav{position:sticky;top:0;z-index:100;background:rgba(245,244,239,.92);backdrop-filter:blur(12px);border-bottom:2px solid var(--ink);transition:box-shadow .3s}
+.kw-nav--sc{box-shadow:0 12px 32px rgba(8,22,39,.14)}
+.kw-nav .kw-c{display:flex;align-items:center;justify-content:space-between;gap:20px;height:74px}
+.kw-logo{display:flex;align-items:center;gap:12px}
+#kwRoot .kw-logo img{height:42px !important;max-height:42px !important;width:auto !important}
+.kw-word{font-family:var(--disp);font-size:1.25rem;letter-spacing:.04em;text-transform:uppercase;line-height:1}
+.kw-word small{display:block;font-family:var(--mono);font-size:.55rem;letter-spacing:.3em;color:var(--red);margin-top:4px}
+.kw-links{display:flex;gap:30px;font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase}
+.kw-links a{position:relative;padding:6px 0;color:var(--ink);white-space:nowrap}
+.kw-links a::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:2px;background:var(--red);transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease)}
+.kw-links a:hover::after{transform:scaleX(1);transform-origin:left}
+.kw-navcta{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;background:var(--red);color:#fff;padding:.85rem 1.3rem;white-space:nowrap;transition:background .3s}
+.kw-navcta:hover{background:var(--ink)}
+.kw-prog{position:absolute;left:0;bottom:-2px;height:2px;width:0;background:var(--red);z-index:5}
+.kw-burger{display:none;width:44px;height:44px;position:relative;z-index:210}
+.kw-burger span{position:absolute;left:10px;right:10px;height:3px;background:var(--ink);transition:.35s var(--ease)}
+.kw-burger span:nth-child(1){top:15px}.kw-burger span:nth-child(2){top:26px}
+.kw-burger.kw-open span:nth-child(1){top:20px;transform:rotate(45deg)}
+.kw-burger.kw-open span:nth-child(2){top:20px;transform:rotate(-45deg)}
+.kw-mnav{position:fixed;inset:0;background:var(--deep);z-index:90;display:flex;flex-direction:column;justify-content:center;padding:100px 8vw 6vh;opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s}
+.kw-mnav.kw-open{opacity:1;visibility:visible}
+.kw-mnav a{font-family:var(--disp);font-size:clamp(2rem,8vw,3.2rem);text-transform:uppercase;color:var(--paper);padding:.55rem 0;border-bottom:1px solid var(--line2);display:flex;justify-content:space-between;align-items:center;transition:color .3s}
+.kw-mnav a:hover{color:var(--red)}
+.kw-mnav a small{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--steel)}
+.kw-mnav .kw-mnav-cta{border:0;color:#FF8A80;margin-top:2rem;justify-content:flex-start;gap:14px;font-size:1.5rem}
+
+/* ============ HERO ============ */
+.kw-hero{position:relative;overflow:hidden;border-bottom:2px solid var(--ink)}
+.kw-hero .kw-c{position:relative;padding:clamp(52px,7vw,96px) 0 0}
+.kw-hero-kw{position:absolute;top:-4%;right:-2%;font-family:var(--disp);font-size:clamp(14rem,34vw,30rem);line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(11,30,59,.10);user-select:none;pointer-events:none;z-index:0}
+.kw-rail{position:absolute;right:18px;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;font-family:var(--mono);font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;color:var(--steel);display:flex;align-items:center;gap:14px;z-index:2}
+.kw-rail::after{content:"";width:1px;height:70px;background:var(--ink)}
+.kw-hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(30px,5vw,70px);align-items:center}
+.kw-h1{font-size:clamp(3rem,8.6vw,7.2rem);margin:22px 0 26px}
+.kw-h1 .kw-red{color:var(--red)}
+.kw-h1 .kw-ghost{color:transparent;-webkit-text-stroke:2px var(--ink)}
+.kw-hero-sub{font-size:clamp(1rem,1.3vw,1.13rem);color:#3A465E;max-width:54ch;margin-bottom:34px}
+.kw-hero-sub b{color:var(--ink)}
+.kw-ctas{display:flex;flex-wrap:wrap;gap:16px}
+.kw-btn{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;padding:1.05rem 1.7rem;display:inline-flex;align-items:center;gap:12px;position:relative;white-space:nowrap;transition:background .3s,color .3s,border-color .3s}
+.kw-btn::before{content:"";position:absolute;top:-5px;left:-5px;width:14px;height:14px;border-top:2px solid var(--red);border-left:2px solid var(--red);transition:transform .35s var(--ease)}
+.kw-btn::after{content:"";position:absolute;bottom:-5px;right:-5px;width:14px;height:14px;border-bottom:2px solid var(--red);border-right:2px solid var(--red);transition:transform .35s var(--ease)}
+.kw-btn:hover::before{transform:translate(-4px,-4px)}
+.kw-btn:hover::after{transform:translate(4px,4px)}
+.kw-btn--red{background:var(--red);color:#fff}
+.kw-btn--red:hover{background:var(--ink)}
+.kw-btn--ghost{border:2px solid var(--ink);color:var(--ink)}
+.kw-btn--ghost:hover{background:var(--ink);color:var(--paper)}
+.kw-hero-fig{position:relative}
+.kw-frame{position:relative;border:2px solid var(--ink);padding:10px;background:#fff}
+.kw-frame::before{content:"";position:absolute;top:-9px;left:-9px;width:38px;height:38px;border-top:3px solid var(--red);border-left:3px solid var(--red)}
+.kw-frame::after{content:"";position:absolute;bottom:-9px;right:-9px;width:38px;height:38px;border-bottom:3px solid var(--red);border-right:3px solid var(--red)}
+.kw-frame .kw-imgwrap{overflow:hidden}
+#kwRoot .kw-frame img{width:100%;height:auto !important}
+.kw-figcap{display:flex;justify-content:space-between;gap:12px;padding:12px 4px 4px;font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--steel)}
+.kw-figcap b{color:var(--red);font-weight:500}
+.kw-hero-stats{position:relative;z-index:1;margin-top:clamp(44px,6vw,76px);border-top:2px solid var(--ink);display:grid;grid-template-columns:repeat(4,1fr)}
+.kw-stat{padding:22px 20px;border-right:1px solid var(--line);font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);display:flex;gap:12px;align-items:baseline}
+.kw-stat:last-child{border-right:0}
+.kw-stat i{font-style:normal;color:var(--red)}
+
+/* ============ MARQUEE ============ */
+.kw-marq{background:var(--red);color:#fff;overflow:hidden;border-bottom:2px solid var(--ink);padding:14px 0}
+.kw-marq-track{display:flex;width:max-content;animation:kwmarq 26s linear infinite}
+.kw-marq:hover .kw-marq-track{animation-play-state:paused}
+.kw-marq span{font-family:var(--disp);font-size:1.25rem;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;padding:0 22px;display:flex;align-items:center;gap:44px}
+.kw-marq span::after{content:"✦";font-size:.85rem;color:rgba(255,255,255,.65)}
+@keyframes kwmarq{to{transform:translateX(-50%)}}
+
+/* ============ SECTIONS ============ */
+.kw-sec{padding:clamp(70px,9vw,120px) 0}
+.kw-shead{display:flex;align-items:center;gap:20px;margin-bottom:18px}
+.kw-shead .kw-tag{white-space:nowrap}
+.kw-shead::after{content:"";flex:1;height:1px;background:var(--line)}
+.kw-h2{font-size:clamp(2.2rem,5.2vw,4.2rem);margin-bottom:26px}
+
+/* ============ ABOUT ============ */
+.kw-about-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(36px,5vw,80px);align-items:start}
+.kw-about-txt p{color:#3A465E;margin-bottom:20px;font-size:1.03rem}
+.kw-about-txt p b{color:var(--ink)}
+.kw-owner{margin-top:30px;border:2px solid var(--ink);padding:20px 22px;display:flex;gap:16px;align-items:center;background:#fff;position:relative}
+.kw-owner::before{content:"";position:absolute;top:-7px;right:-7px;width:22px;height:22px;border-top:3px solid var(--red);border-right:3px solid var(--red)}
+.kw-owner-av{width:56px;height:56px;flex:none;background:var(--ink);color:#fff;font-family:var(--disp);font-size:1.3rem;display:grid;place-items:center}
+.kw-owner b{display:block;font-family:var(--disp);font-size:1.05rem;letter-spacing:.05em;text-transform:uppercase}
+.kw-owner span{font-family:var(--mono);font-size:.64rem;letter-spacing:.24em;text-transform:uppercase;color:var(--red)}
+.kw-about-imgs{position:relative;min-height:520px}
+.kw-polar{position:absolute;background:#fff;border:2px solid var(--ink);padding:9px 9px 12px;box-shadow:0 24px 48px rgba(8,22,39,.16);transition:transform .5s var(--ease)}
+.kw-polar:hover{transform:rotate(0deg) scale(1.02)!important;z-index:6}
+.kw-polar figcaption{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--steel);padding-top:9px;display:flex;justify-content:space-between}
+.kw-polar figcaption i{font-style:normal;color:var(--red)}
+#kwRoot .kw-polar img{width:100%;height:auto !important}
+.kw-p1{width:64%;right:0;top:0;transform:rotate(1.5deg);z-index:3}
+.kw-p2{width:52%;left:0;top:36%;transform:rotate(-2.5deg);z-index:4}
+.kw-p3{width:38%;right:6%;bottom:0;transform:rotate(2deg);z-index:5}
+
+/* ============ OFFERS ============ */
+.kw-offers{background:#fff;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.kw-row{display:grid;grid-template-columns:110px 1fr auto 40px;gap:26px;align-items:center;padding:30px 10px;border-top:2px solid var(--ink);transition:background .4s var(--ease),color .4s var(--ease),padding-left .4s var(--ease)}
+.kw-row:last-of-type{border-bottom:2px solid var(--ink)}
+.kw-row-num{font-family:var(--disp);font-size:2.3rem;color:transparent;-webkit-text-stroke:1.6px var(--ink);transition:.4s}
+.kw-row h3{font-size:clamp(1.25rem,2.4vw,2rem);margin-bottom:4px;transition:color .4s}
+.kw-row p{font-size:.95rem;color:var(--steel);max-width:60ch;transition:color .4s}
+.kw-row-thumb{width:86px;height:64px;overflow:hidden;border:2px solid var(--ink);opacity:.35;transition:.45s var(--ease)}
+#kwRoot .kw-row-thumb img{width:100%;height:100% !important;object-fit:cover}
+.kw-row-arr{font-family:var(--disp);font-size:1.6rem;color:var(--red);opacity:0;transform:translateX(-10px);transition:.35s var(--ease)}
+.kw-row:hover{background:var(--ink);color:var(--paper);padding-left:26px}
+.kw-row:hover .kw-row-num{-webkit-text-stroke:1.6px var(--red);color:var(--red)}
+.kw-row:hover h3{color:var(--paper)}
+.kw-row:hover p{color:#AAB4C8}
+.kw-row:hover .kw-row-thumb{opacity:1;transform:rotate(-2deg) scale(1.05)}
+.kw-row:hover .kw-row-arr{opacity:1;transform:none}
+
+/* ============ RANGE — full-image catalog plates ============ */
+.kw-g{columns:2;column-gap:18px}
+.kw-gi{break-inside:avoid;-webkit-column-break-inside:avoid;margin:0 0 18px;border:2px solid var(--ink);background:#fff;padding:10px;transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+.kw-gi:hover{transform:translateY(-5px);box-shadow:0 18px 36px rgba(8,22,39,.16)}
+#kwRoot .kw-gi img{width:100%;height:auto !important;border:1px solid var(--line)}
+.kw-gi figcaption{padding:12px 4px 2px;font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);display:flex;justify-content:space-between;gap:10px}
+.kw-gi figcaption i{font-style:normal;color:var(--red)}
+
+/* ============ MISSION ============ */
+.kw-mv{background:var(--deep);color:var(--paper);position:relative;overflow:hidden}
+.kw-mv::before{content:"MV";position:absolute;bottom:-12%;left:-2%;font-family:var(--disp);font-size:clamp(12rem,26vw,22rem);line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(245,244,239,.07)}
+.kw-mv .kw-h2{color:var(--paper)}
+.kw-mv-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;position:relative;z-index:1}
+.kw-mv-card{border:1px solid var(--line2);padding:clamp(28px,4vw,48px);position:relative;background:rgba(245,244,239,.02)}
+.kw-mv-card::before{content:"";position:absolute;top:-1px;left:-1px;width:46px;height:46px;border-top:3px solid var(--red);border-left:3px solid var(--red)}
+.kw-mv-card h3{font-size:clamp(1.7rem,3vw,2.5rem);color:var(--paper);margin:14px 0 18px}
+.kw-mv-card p{color:#AAB4C8;font-size:1.02rem}
+.kw-mv-card--red{background:var(--red);border-color:var(--red)}
+.kw-mv-card--red::before{border-color:var(--paper)}
+.kw-mv-card--red p{color:rgba(255,255,255,.88)}
+.kw-mv-chips{position:relative;z-index:1;margin-top:26px;display:flex;flex-wrap:wrap;gap:12px}
+.kw-mv-chips li{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--line2);padding:.7rem 1.1rem;color:#DCE1EC;transition:.3s}
+.kw-mv-chips li:hover{border-color:var(--red);color:#FF8A80}
+
+/* ============ CONTACT ============ */
+.kw-contact-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(36px,5vw,80px);align-items:start}
+.kw-phone{font-family:var(--disp);font-size:clamp(2.6rem,6.4vw,5rem);color:var(--red);display:inline-block;line-height:1;margin:6px 0 8px;letter-spacing:.02em;transition:color .3s}
+.kw-phone:hover{color:var(--ink)}
+.kw-phone-lab{font-family:var(--mono);font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--steel);display:block;margin-bottom:26px}
+.kw-cinfo{border-top:2px solid var(--ink)}
+.kw-crow{display:flex;justify-content:space-between;align-items:baseline;gap:18px;padding:17px 4px;border-bottom:1px solid var(--line);transition:background .3s,padding-left .3s}
+.kw-crow:hover{background:#fff;padding-left:14px}
+.kw-crow dt{font-family:var(--mono);font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--steel);flex:none}
+.kw-crow dd{font-weight:600;text-align:right;font-size:.98rem}
+.kw-crow a:hover{color:var(--red)}
+.kw-socrow{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap}
+.kw-soc{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;border:2px solid var(--ink);padding:.85rem 1.2rem;display:inline-flex;gap:10px;align-items:center;transition:.3s}
+.kw-soc:hover{background:var(--ink);color:var(--paper)}
+.kw-soc i{font-style:normal;color:var(--red)}
+.kw-mapcard{display:block;border:2px solid var(--ink);background:#fff;padding:10px;position:relative;transition:transform .4s var(--ease)}
+.kw-mapcard:hover{transform:translateY(-6px)}
+.kw-mapcard::before{content:"";position:absolute;top:-9px;right:-9px;width:34px;height:34px;border-top:3px solid var(--red);border-right:3px solid var(--red)}
+#kwRoot .kw-mapcard img{width:100%;height:auto !important;max-height:440px;object-fit:contain;background:#fff}
+.kw-mapcard span{display:flex;justify-content:space-between;gap:10px;padding:12px 4px 4px;font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--steel)}
+.kw-mapcard span i{font-style:normal;color:var(--red)}
+
+/* ============ FOOTER ============ */
+.kw-foot{background:var(--deep);color:#8C96AC;border-top:3px solid var(--red)}
+.kw-foot .kw-c{padding:60px 0 0}
+.kw-foot-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:30px;padding-bottom:44px;border-bottom:1px solid var(--line2)}
+.kw-foot-word{font-family:var(--disp);font-size:clamp(2.6rem,7vw,5rem);color:var(--paper);text-transform:uppercase;line-height:.95}
+.kw-foot-word em{font-style:normal;color:var(--red)}
+.kw-foot-tag{font-family:var(--mono);font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:#FF8A80;margin-top:12px}
+.kw-foot-nav{display:flex;gap:26px;flex-wrap:wrap;font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase}
+.kw-foot-nav a:hover{color:#fff}
+.kw-foot-bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding:22px 0;font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase}
+.kw-foot-bot a:hover{color:#FF8A80}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:1100px){.kw-rail{display:none}}
+@media(max-width:960px){
+  .kw-links{display:none}
+  .kw-burger{display:block}
+  .kw-hero-grid,.kw-about-grid,.kw-mv-grid,.kw-contact-grid{grid-template-columns:1fr}
+  .kw-hero-fig{max-width:560px}
+  .kw-about-imgs{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
+  .kw-polar{position:static;width:auto!important;transform:none!important}
+  .kw-p3{display:none}
+  .kw-row{grid-template-columns:64px 1fr;gap:14px}
+  .kw-row-thumb,.kw-row-arr{display:none}
+  .kw-row p{grid-column:2}
+  .kw-util .kw-u-r span:first-child{display:none}
+}
+@media(max-width:720px){
+  .kw-hero-stats{grid-template-columns:1fr 1fr}
+  .kw-stat{border-bottom:1px solid var(--line)}
+  .kw-g{columns:1}
+  .kw-util{display:none}
+}
+@media(max-width:480px){
+  #kwRoot{font-size:16px}
+  #kwRoot .kw-logo img{height:34px !important;max-height:34px !important}
+  .kw-about-imgs{grid-template-columns:1fr}
+}
+
+/* ============ REDUCED MOTION ============ */
+@media(prefers-reduced-motion:reduce){
+  #kwRoot *,#kwRoot *::before,#kwRoot *::after{animation:none!important;transition:none!important}
+  #kwRoot.kw-js .kw-rv{opacity:1;transform:none}
+  #kwRoot.kw-js .kw-lm>span{transform:none}
+}
+</style>
+
+<div class="kw-noise" aria-hidden="true"></div>
+
+<!-- UTILITY BAR -->
+<div class="kw-util">
+  <div class="kw-c">
+    <span>KITCHEN WORLD — <b>FOR YOUR KITCHEN NEEDS</b></span>
+    <span class="kw-u-r">
+      <span>187C CENTRAL RD, COLOMBO 12</span>
+      <a href="https://wa.me/94756220333" target="_blank" rel="noopener">WA · 075 622 0333</a>
+    </span>
+  </div>
+</div>
+
+<!-- NAV -->
+<header class="kw-nav">
+  <div class="kw-c">
+    <a class="kw-logo" href="#kw-home">
+      <img src="https://drive.google.com/thumbnail?id=1HrXrPV7fbfIsIhnbLWKU3UZWH-MfiHat&amp;sz=w400" alt="Kitchen World logo" onerror="this.style.display='none'">
+      <span class="kw-word">Kitchen World<small>EST · COLOMBO 12</small></span>
+    </a>
+    <nav class="kw-links" aria-label="Main">
+      <a href="#kw-about">About</a>
+      <a href="#kw-offer">What We Offer</a>
+      <a href="#kw-range">Range</a>
+      <a href="#kw-mission">Mission</a>
+      <a href="#kw-contact">Contact</a>
+    </nav>
+    <a class="kw-navcta" href="https://wa.me/94756220333" target="_blank" rel="noopener">WhatsApp Us ↗</a>
+    <button class="kw-burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  </div>
+  <div class="kw-prog" aria-hidden="true"></div>
+</header>
+
+<!-- MOBILE MENU -->
+<nav class="kw-mnav" aria-label="Mobile">
+  <a href="#kw-about">About <small>[01]</small></a>
+  <a href="#kw-offer">What We Offer <small>[02]</small></a>
+  <a href="#kw-range">The Range <small>[03]</small></a>
+  <a href="#kw-mission">Mission <small>[04]</small></a>
+  <a href="#kw-contact">Contact <small>[05]</small></a>
+  <a class="kw-mnav-cta" href="https://wa.me/94756220333" target="_blank" rel="noopener">WhatsApp Us <small>075 622 0333 ↗</small></a>
+</nav>
+
+<!-- HERO -->
+<section class="kw-hero" id="kw-home">
+  <span class="kw-hero-kw" aria-hidden="true">KW</span>
+  <span class="kw-rail" aria-hidden="true">SRI LANKA — RETAIL &amp; WHOLESALE — IMPORTED EQUIPMENT</span>
+  <div class="kw-c">
+    <div class="kw-hero-grid">
+      <div class="kw-rv">
+        <span class="kw-tag" data-scramble>[ IMPORTED KITCHEN EQUIPMENT ]</span>
+        <h1 class="kw-h1">
+          <span class="kw-lm"><span style="--d:.05s">Your Complete</span></span>
+          <span class="kw-lm"><span style="--d:.16s" class="kw-red">Kitchen</span></span>
+          <span class="kw-lm"><span style="--d:.27s" class="kw-ghost">Solutions</span></span>
+        </h1>
+        <p class="kw-hero-sub">Welcome to <b>Kitchen World</b> — your trusted destination for high-quality kitchen equipment. From everyday essentials to professional-grade machinery, we supply imported solutions for <b>homes, medium-scale kitchens and large hotel operations</b> — combining quality, durability and value.</p>
+        <div class="kw-ctas">
+          <a class="kw-btn kw-btn--red" href="https://wa.me/94756220333" target="_blank" rel="noopener">Chat on WhatsApp</a>
+          <a class="kw-btn kw-btn--ghost" href="#kw-range">View Our Range ↓</a>
+        </div>
+      </div>
+      <figure class="kw-hero-fig kw-rv" style="--d:.2s">
+        <div class="kw-frame">
+          <div class="kw-imgwrap">
+            <img src="https://drive.google.com/thumbnail?id=1vWfCgEeXgVk_iutNcaHa4k0ExD_sfTmf&amp;sz=w1600" alt="Kitchen World equipment" loading="eager">
+          </div>
+          <figcaption class="kw-figcap"><span><b>FIG.01</b> — SHOWROOM</span><span>RETAIL / WHOLESALE</span></figcaption>
+        </div>
+      </figure>
+    </div>
+    <div class="kw-hero-stats">
+      <span class="kw-stat"><i>01</i> Home Kitchens</span>
+      <span class="kw-stat"><i>02</i> Restaurants &amp; Hotels</span>
+      <span class="kw-stat"><i>03</i> Industrial Setups</span>
+      <span class="kw-stat"><i>04</i> Retail + Wholesale</span>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="kw-marq" aria-hidden="true">
+  <div class="kw-marq-track">
+    <span>Imported Kitchen Equipment</span><span>World-Class Brands</span><span>Competitive Prices</span><span>After-Sales Support</span><span>Under One Roof</span>
+    <span>Imported Kitchen Equipment</span><span>World-Class Brands</span><span>Competitive Prices</span><span>After-Sales Support</span><span>Under One Roof</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="kw-sec" id="kw-about">
+  <div class="kw-c">
+    <div class="kw-shead kw-rv"><span class="kw-tag" data-scramble>[ 01 — WHO WE ARE ]</span></div>
+    <div class="kw-about-grid">
+      <div class="kw-about-txt kw-rv">
+        <h2 class="kw-h2">
+          <span class="kw-lm"><span>Everything</span></span>
+          <span class="kw-lm"><span style="--d:.1s">Under One</span></span>
+          <span class="kw-lm"><span style="--d:.2s">Roof.</span></span>
+        </h2>
+        <p><b>Kitchen World</b> is a leading supplier of premium kitchen equipment, dedicated to delivering excellence to our customers. We import top-quality products from globally recognized brands and make them available in Sri Lanka at competitive prices.</p>
+        <p>Whether you are setting up a <b>home kitchen, a restaurant, or a large-scale hotel kitchen</b>, we provide everything you need under one roof — both retail and wholesale.</p>
+        <p>Our commitment is to ensure customer satisfaction through reliable products, excellent service, and strong after-sales support.</p>
+        <div class="kw-owner">
+          <span class="kw-owner-av">MZ</span>
+          <span><b>M S M Zuhrie</b><span>Business Owner — Kitchen World</span></span>
+        </div>
+      </div>
+      <div class="kw-about-imgs kw-rv" style="--d:.15s">
+        <figure class="kw-polar kw-p1">
+          <img src="https://drive.google.com/thumbnail?id=1xlz4R0XwsPI490gMlLvZ4Tz045BRxjLm&amp;sz=w1000" alt="Kitchen World showroom" loading="lazy">
+          <figcaption><span>SHOWROOM — COL 12</span><i>A.01</i></figcaption>
+        </figure>
+        <figure class="kw-polar kw-p2">
+          <img src="https://drive.google.com/thumbnail?id=1XsQwuSz650CH10eaKH0Hwx8rX_6e3zzK&amp;sz=w900" alt="Kitchen World products" loading="lazy">
+          <figcaption><span>EQUIPMENT</span><i>A.02</i></figcaption>
+        </figure>
+        <figure class="kw-polar kw-p3">
+          <img src="https://drive.google.com/thumbnail?id=1iNfA0blrItq_TMa5CwaTVgbxtsk7K6b-&amp;sz=w700" alt="Kitchen World stock" loading="lazy">
+          <figcaption><span>IN STOCK</span><i>A.03</i></figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFERS -->
+<section class="kw-sec kw-offers" id="kw-offer">
+  <div class="kw-c">
+    <div class="kw-shead kw-rv"><span class="kw-tag" data-scramble>[ 02 — SERVICES ]</span></div>
+    <h2 class="kw-h2 kw-rv">
+      <span class="kw-lm"><span>At Kitchen World,</span></span>
+      <span class="kw-lm"><span style="--d:.1s">We Offer:</span></span>
+    </h2>
+    <div style="margin-top:34px">
+      <div class="kw-row kw-rv">
+        <span class="kw-row-num">01</span>
+        <div><h3>Imported Kitchen Equipment</h3><p>Equipment sourced from world-class international brands.</p></div>
+        <span class="kw-row-thumb"><img src="https://drive.google.com/thumbnail?id=1W2WHaJ4VoWWVOji9uMZScwQEZ3udR-Md&amp;sz=w400" alt="" loading="lazy"></span>
+        <span class="kw-row-arr">→</span>
+      </div>
+      <div class="kw-row kw-rv" style="--d:.06s">
+        <span class="kw-row-num">02</span>
+        <div><h3>Complete Home Kitchen Solutions</h3><p>Full solutions designed for modern home kitchens.</p></div>
+        <span class="kw-row-thumb"><img src="https://drive.google.com/thumbnail?id=1grFUm40omRS-pNi1KZOz8Jif8j-xiBdu&amp;sz=w400" alt="" loading="lazy"></span>
+        <span class="kw-row-arr">→</span>
+      </div>
+      <div class="kw-row kw-rv" style="--d:.12s">
+        <span class="kw-row-num">03</span>
+        <div><h3>Restaurant &amp; Hotel Equipment</h3><p>Reliable equipment for medium-scale restaurants and hotels.</p></div>
+        <span class="kw-row-thumb"><img src="https://drive.google.com/thumbnail?id=1wJqdvgKJ0DHPfVd6WnvshmLhRRXllCuc&amp;sz=w400" alt="" loading="lazy"></span>
+        <span class="kw-row-arr">→</span>
+      </div>
+      <div class="kw-row kw-rv" style="--d:.18s">
+        <span class="kw-row-num">04</span>
+        <div><h3>Industrial Kitchen Solutions</h3><p>Heavy-duty solutions built for large-scale operations.</p></div>
+        <span class="kw-row-thumb"><img src="https://drive.google.com/thumbnail?id=1qF0Xky2XBkSpuGu0_vxr0WtPWVol-91A&amp;sz=w400" alt="" loading="lazy"></span>
+        <span class="kw-row-arr">→</span>
+      </div>
+      <div class="kw-row kw-rv" style="--d:.24s">
+        <span class="kw-row-num">05</span>
+        <div><h3>Retail &amp; Wholesale</h3><p>Flexible purchasing — buy one unit or outfit a full kitchen.</p></div>
+        <span class="kw-row-thumb"><img src="https://drive.google.com/thumbnail?id=1w6EQbsGbNvWK9DEn4GjMHLa-_BQYMgSo&amp;sz=w400" alt="" loading="lazy"></span>
+        <span class="kw-row-arr">→</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RANGE -->
+<section class="kw-sec" id="kw-range">
+  <div class="kw-c">
+    <div class="kw-shead kw-rv"><span class="kw-tag" data-scramble>[ 03 — THE RANGE ]</span></div>
+    <h2 class="kw-h2 kw-rv">
+      <span class="kw-lm"><span>Built For</span></span>
+      <span class="kw-lm"><span style="--d:.1s">Serious Kitchens.</span></span>
+    </h2>
+    <div class="kw-g" style="margin-top:34px">
+      <figure class="kw-gi kw-rv">
+        <img src="https://drive.google.com/thumbnail?id=1W2WHaJ4VoWWVOji9uMZScwQEZ3udR-Md&amp;sz=w1400" alt="Imported kitchen equipment" loading="lazy">
+        <figcaption><span>Imported Equipment</span><i>R.01</i></figcaption>
+      </figure>
+      <figure class="kw-gi kw-rv" style="--d:.08s">
+        <img src="https://drive.google.com/thumbnail?id=1grFUm40omRS-pNi1KZOz8Jif8j-xiBdu&amp;sz=w1400" alt="Home kitchen line" loading="lazy">
+        <figcaption><span>Home Kitchen Line</span><i>R.02</i></figcaption>
+      </figure>
+      <figure class="kw-gi kw-rv" style="--d:.14s">
+        <img src="https://drive.google.com/thumbnail?id=1wJqdvgKJ0DHPfVd6WnvshmLhRRXllCuc&amp;sz=w1400" alt="Restaurant equipment" loading="lazy">
+        <figcaption><span>Restaurant</span><i>R.03</i></figcaption>
+      </figure>
+      <figure class="kw-gi kw-rv" style="--d:.2s">
+        <img src="https://drive.google.com/thumbnail?id=1qF0Xky2XBkSpuGu0_vxr0WtPWVol-91A&amp;sz=w1400" alt="Industrial equipment" loading="lazy">
+        <figcaption><span>Industrial</span><i>R.04</i></figcaption>
+      </figure>
+      <figure class="kw-gi kw-rv" style="--d:.26s">
+        <img src="https://drive.google.com/thumbnail?id=1w6EQbsGbNvWK9DEn4GjMHLa-_BQYMgSo&amp;sz=w1400" alt="Retail and wholesale range" loading="lazy">
+        <figcaption><span>Retail &amp; Wholesale Range</span><i>R.05</i></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="kw-sec kw-mv" id="kw-mission">
+  <div class="kw-c">
+    <div class="kw-shead kw-rv"><span class="kw-tag kw-tag--lt" data-scramble>[ 04 — PURPOSE ]</span></div>
+    <h2 class="kw-h2 kw-rv"><span class="kw-lm"><span>Why We Do It.</span></span></h2>
+    <div class="kw-mv-grid">
+      <div class="kw-mv-card kw-rv">
+        <span class="kw-tag kw-tag--lt">Our Mission</span>
+        <h3>Quality Equipment. Reliable Support.</h3>
+        <p>To provide high-quality, world-class kitchen equipment at competitive prices while delivering exceptional customer service and reliable support to every customer we serve.</p>
+      </div>
+      <div class="kw-mv-card kw-mv-card--red kw-rv" style="--d:.12s">
+        <span class="kw-tag" style="color:#fff">Our Vision</span>
+        <h3>Sri Lanka's Most Trusted Supplier.</h3>
+        <p>To become the most trusted and leading supplier of kitchen equipment in Sri Lanka, recognized for quality, innovation, and customer satisfaction.</p>
+      </div>
+    </div>
+    <ul class="kw-mv-chips kw-rv" style="--d:.2s">
+      <li>Quality</li><li>Durability</li><li>Value</li><li>Competitive Prices</li><li>After-Sales Support</li><li>Retail + Wholesale</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="kw-sec" id="kw-contact">
+  <div class="kw-c">
+    <div class="kw-shead kw-rv"><span class="kw-tag" data-scramble>[ 05 — GET IN TOUCH ]</span></div>
+    <div class="kw-contact-grid">
+      <div class="kw-rv">
+        <h2 class="kw-h2">
+          <span class="kw-lm"><span>Let's Talk</span></span>
+          <span class="kw-lm"><span style="--d:.1s">Kitchen.</span></span>
+        </h2>
+        <a class="kw-phone" href="https://wa.me/94756220333" target="_blank" rel="noopener">075 622 0333</a>
+        <span class="kw-phone-lab">WhatsApp Business — Tap to chat</span>
+        <dl class="kw-cinfo">
+          <div class="kw-crow"><dt>Showroom</dt><dd>187C, Central Road, Colombo 12</dd></div>
+          <div class="kw-crow"><dt>Other Contact</dt><dd><a href="tel:+94766220138">076 622 0138</a></dd></div>
+          <div class="kw-crow"><dt>Email</dt><dd><a href="mailto:info@kitchenworld.lk">info@kitchenworld.lk</a></dd></div>
+          <div class="kw-crow"><dt>Email 2</dt><dd><a href="mailto:kitchenworldgm@gmail.com">kitchenworldgm@gmail.com</a></dd></div>
+          <div class="kw-crow"><dt>Web</dt><dd>www.kitchenworld.lk</dd></div>
+        </dl>
+        <div class="kw-socrow">
+          <a class="kw-soc" href="https://www.facebook.com/share/1DY9MVgCXf/" target="_blank" rel="noopener"><i>FB</i> Facebook ↗</a>
+          <a class="kw-soc" href="https://www.tiktok.com/@kitchen_world04?_r=1&amp;_t=ZS-98bJcsp1R9I" target="_blank" rel="noopener"><i>TT</i> TikTok ↗</a>
+          <a class="kw-soc" href="https://maps.app.goo.gl/wRTHfMvgiKcNFS3R9" target="_blank" rel="noopener"><i>MP</i> Google Maps ↗</a>
+        </div>
+      </div>
+      <div class="kw-rv" style="--d:.15s">
+        <a class="kw-mapcard" href="https://maps.app.goo.gl/wRTHfMvgiKcNFS3R9" target="_blank" rel="noopener">
+          <img src="https://drive.google.com/thumbnail?id=1xlz4R0XwsPI490gMlLvZ4Tz045BRxjLm&amp;sz=w1400" alt="Visit Kitchen World showroom" loading="lazy">
+          <span><span><i>VISIT US</i> — 187C Central Rd, Colombo 12</span><span>Open in Maps ↗</span></span>
+        </a>
+        <div style="margin-top:26px;display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+          <a class="kw-btn kw-btn--red" href="https://wa.me/94756220333?text=Hello%20Kitchen%20World!" target="_blank" rel="noopener">Chat on WhatsApp</a>
+          <a class="kw-btn kw-btn--ghost" href="tel:+94756220333">Call 075 622 0333</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="kw-foot">
+  <div class="kw-c">
+    <div class="kw-foot-top">
+      <div>
+        <div class="kw-foot-word">Kitchen <em>World</em></div>
+        <div class="kw-foot-tag">For Your Kitchen Needs</div>
+      </div>
+      <nav class="kw-foot-nav">
+        <a href="#kw-home">Home</a>
+        <a href="#kw-about">About</a>
+        <a href="#kw-offer">Services</a>
+        <a href="#kw-range">Range</a>
+        <a href="#kw-mission">Mission</a>
+        <a href="#kw-contact">Contact</a>
+      </nav>
+    </div>
+    <div class="kw-foot-bot">
+      <span>© <span data-kw-year>2026</span> Kitchen World · M S M Zuhrie · www.kitchenworld.lk</span>
+      <a href="#kw-home">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+</div>
+
+<script>
+(function(){
+  if(window.__kwInit)return; window.__kwInit=1;
+  var R=document.getElementById('kwRoot'); if(!R)return;
+  R.classList.add('kw-js');
+  var RM=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var rv=R.querySelectorAll('.kw-rv');
+  if(RM||!('IntersectionObserver' in window)){
+    rv.forEach(function(e){e.classList.add('kw-in');});
+  }else{
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('kw-in'); io.unobserve(en.target);} });
+    },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+    rv.forEach(function(e){io.observe(e);});
+  }
+
+  var CH='█▓▒░<>/#0123456789';
+  function scramble(el){
+    var t=el.getAttribute('data-scramble')||el.textContent, len=t.length, i=0;
+    var iv=setInterval(function(){
+      i+=Math.max(1,Math.ceil(len/16)); var s='';
+      for(var j=0;j<len;j++){ s+= j<i ? t[j] : CH[Math.floor(Math.random()*CH.length)]; }
+      el.textContent=s;
+      if(i>=len){ clearInterval(iv); el.textContent=t; }
+    },36);
+  }
+  var sc=R.querySelectorAll('[data-scramble]');
+  if(!RM&&('IntersectionObserver' in window)){
+    var io2=new IntersectionObserver(function(es){
+      es.forEach(function(en){ if(en.isIntersecting){ scramble(en.target); io2.unobserve(en.target);} });
+    },{threshold:.6});
+    sc.forEach(function(e){io2.observe(e);});
+  }
+
+  var nav=R.querySelector('.kw-nav'), prog=R.querySelector('.kw-prog');
+  function onSc(){
+    var y=window.scrollY||document.documentElement.scrollTop||0;
+    if(nav)nav.classList.toggle('kw-nav--sc',y>10);
+    if(prog){var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=(h>0?Math.min(100,y/h*100):0)+'%';}
+  }
+  window.addEventListener('scroll',onSc,{passive:true}); onSc();
+
+  var bt=R.querySelector('.kw-burger'), mn=R.querySelector('.kw-mnav');
+  if(bt&&mn){
+    bt.addEventListener('click',function(){
+      var o=mn.classList.toggle('kw-open');
+      bt.classList.toggle('kw-open',o);
+      bt.setAttribute('aria-expanded',o?'true':'false');
+      document.body.style.overflow=o?'hidden':'';
+    });
+    mn.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click',function(){
+        mn.classList.remove('kw-open'); bt.classList.remove('kw-open'); document.body.style.overflow='';
+      });
+    });
+  }
+
+  R.querySelectorAll('a[href^="#kw"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var t=R.querySelector(a.getAttribute('href'));
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:RM?'auto':'smooth',block:'start'}); }
+    });
+  });
+
+  var y=R.querySelector('[data-kw-year]'); if(y)y.textContent=new Date().getFullYear();
+})();
+</script>
